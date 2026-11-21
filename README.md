@@ -6,6 +6,8 @@
   <em>Read Japanese Manga with Instant Selectable Text & Popup Dictionaries</em>
 </p>
 
+![Mokuro bookshelf (placeholder covers)](assets/screenshot-reader.png)
+
 ---
 
 ## ⚡ What is Mokuro?
