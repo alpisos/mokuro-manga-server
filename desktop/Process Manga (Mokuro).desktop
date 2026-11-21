@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=Process Manga (Mokuro)
+Comment=Run Mokuro to process manga volumes and generate interactive HTML readers
+Exec=konsole --noclose -e INSTALL_DIR/process_volume.sh
+Icon=INSTALL_DIR/assets/logo.png
+Path=INSTALL_DIR
+Terminal=false
+Type=Application
+Categories=Graphics;Utility;
+StartupNotify=true

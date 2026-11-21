@@ -1,0 +1,108 @@
+================================================================================
+                        WHAT IS MOKURO AND HOW IT WORKS
+================================================================================
+
+1. WHAT MOKURO DOES
+--------------------------------------------------------------------------------
+Mokuro (モクロ) is an open-source tool designed specifically for Japanese manga.
+It takes static manga pages (image files, .cbz, or .zip volumes) and transforms
+them into interactive web pages where all Japanese dialogue, thoughts, and text
+are selectable, searchable, and machine-readable.
+
+Instead of reading raw, unsearchable image scans, Mokuro overlays an invisible,
+perfectly aligned layer of text on top of the original artwork.
+
+When reading a Mokuro-processed volume:
+- You see the original, untouched manga artwork.
+- You can hover over or highlight any speech bubble.
+- You can copy Japanese text directly to your clipboard.
+- You can use browser popup dictionaries (like Yomitan) to get instant definitions,
+  furigana readings, and pitch accents with a single mouse hover.
+- You can create flashcards in Anki with 1 click, automatically capturing the word,
+  definition, sentence context, and a cropped screenshot of the manga panel.
+
+
+2. HOW MOKURO WORKS (THE TECHNICAL PIPELINE)
+--------------------------------------------------------------------------------
+Mokuro processes manga volumes through a sophisticated multi-stage pipeline:
+
+STAGE 1: VOLUME INGESTION
+- Mokuro accepts volume folders, .cbz, or .zip archives.
+- It unpacks the images in memory or to disk, sorting pages in natural reading
+  order (page 001, page 002, etc.).
+
+STAGE 2: TEXT DETECTION & SEGMENTATION
+- Traditional OCR engines (like Tesseract) struggle with manga because manga text
+  is written vertically (tategaki), mixed with horizontal text (yokogaki), placed
+  inside varied balloon shapes, and surrounded by intricate artwork.
+- Mokuro runs a specialized deep-learning text detector to locate every text
+  region, speech balloon, narration box, and background sign.
+- It calculates precise polygon bounding boxes and coordinates for each line
+  and bubble.
+
+STAGE 3: TEXT RECOGNITION (MANGA-OCR)
+- Each detected text crop is passed to "Manga-OCR" (created by kha-white).
+- Manga-OCR is an advanced Vision Transformer (ViT) paired with a sequence-to-sequence
+  language model, trained specifically on tens of thousands of manga panels.
+- It excels at recognizing:
+  * Vertical Japanese text (read top-to-bottom, right-to-left).
+  * Manga-specific stylized fonts, bold battle cries, and handwriting.
+  * Furigana (small ruby text beside kanji): Manga-OCR is trained to read the
+    underlying kanji without creating duplicate or corrupted strings.
+  * Low-resolution or compressed scans.
+
+STAGE 4: STRUCTURED METADATA GENERATION (.mokuro)
+- Mokuro saves the detected coordinates, text content, line breaks, and reading
+  order into a clean JSON-based metadata file (`.mokuro`) and a cached `_ocr/`
+  folder.
+- This cache allows you to regenerate reader layouts in milliseconds without
+  re-running the AI model.
+
+STAGE 5: INTERACTIVE HTML READER CREATION
+- Mokuro generates a self-contained `.html` file inside the manga volume folder.
+- The HTML file contains:
+  * An embedded manga viewer that supports right-to-left (RTL) reading, page
+    turning (arrow keys / spacebar), and zoom.
+  * CSS positioning layers that place transparent, selectable text boxes exactly
+    over the speech bubbles.
+  * Zero alteration to the underlying image files (your artwork remains pristine).
+
+
+3. WHY IT MATTERS FOR JAPANESE LANGUAGE LEARNERS
+--------------------------------------------------------------------------------
+Reading native Japanese manga is one of the most effective ways to acquire natural
+vocabulary and grammar, but traditional methods are tedious:
+- Looking up unknown kanji by radical or handwriting is slow and breaks reading flow.
+- Copying sentences into Anki manually takes minutes per card.
+
+With Mokuro:
+- Hold Shift (or hover) over any word: Yomitan instantly displays the definition,
+  kanji components, and audio pitch accent.
+- Press "+" in the popup: A complete flashcard (with word, meaning, audio, full
+  sentence, and screenshot) is added to Anki in under 1 second.
+- You spend your time reading and enjoying the story, not wrestling with dictionaries.
+
+
+4. QUICK CLI COMMANDS
+--------------------------------------------------------------------------------
+- Process a single volume:
+    mokuro "/path/to/manga_volume"
+
+- Process without confirmation prompt:
+    mokuro --disable_confirmation "/path/to/manga_volume"
+
+- Process an entire folder of multiple volumes:
+    mokuro --parent_dir "/path/to/series_folder" --disable_confirmation
+
+- Update Mokuro to the latest version:
+    uv tool upgrade mokuro
+
+
+5. HELPER SCRIPTS IN THIS FOLDER
+--------------------------------------------------------------------------------
+- process_volume.sh : Interactive prompt to process any single manga volume.
+- batch_process.sh  : Scans 'manga_input/' and processes all volumes inside.
+- serve_library.sh  : Starts a local web server (http://localhost:8080) for reading
+                      in your browser without file URL restrictions.
+- update_mokuro.sh  : Checks and updates Mokuro using the uv tool manager.
+================================================================================

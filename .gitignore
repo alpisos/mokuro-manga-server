@@ -1,0 +1,9 @@
+# Your manga: never commit (large + copyrighted)
+manga_input/*
+manga_library/*
+!manga_input/.gitkeep
+!manga_library/.gitkeep
+
+.directory
+__pycache__/
+*.pyc

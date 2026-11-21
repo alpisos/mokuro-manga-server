@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=Start Manga Server
+Comment=Start local HTTP server for Mokuro manga library
+Exec=konsole --noclose -e INSTALL_DIR/serve_library.sh
+Icon=INSTALL_DIR/assets/logo.png
+Path=INSTALL_DIR
+Terminal=false
+Type=Application
+Categories=Network;Utility;
+StartupNotify=true

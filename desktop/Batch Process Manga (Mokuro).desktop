@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Name=Batch Process Manga (Mokuro)
+Comment=Batch process all manga waiting in manga_input/
+Exec=konsole --noclose -e INSTALL_DIR/batch_process.sh
+Icon=INSTALL_DIR/assets/logo.png
+Path=INSTALL_DIR
+Terminal=false
+Type=Application
+Categories=Graphics;Utility;
+StartupNotify=true
